@@ -1,4 +1,4 @@
-REPORT z_sales_order_report line-count 10(1).
+REPORT z_sales_order_report line-count 20(1).
 
 TABLES vbak.
 * Selection screen
@@ -21,7 +21,7 @@ SELECT a~vbeln, a~erdat, a~auart, b~posnr, b~matnr, b~kwmeng, b~netpr
    FROM vbak AS a
   INNER JOIN vbap AS b ON a~vbeln = b~vbeln INTO TABLE @DATA(it_table) WHERE a~vbeln in @s_vbeln.
 end-of-selection.
-IF sy-subrc = 0.
+IF it_table is not initial.
 skip 1 .
 write:/'Sales order',
        19 'Created on',
@@ -34,12 +34,12 @@ write:/'Sales order',
   LOOP AT it_table INTO DATA(wa_table).
 
     WRITE:/ wa_table-vbeln,
-   19 wa_table-erdat,
-    31 wa_table-auart,
-     45 wa_table-posnr,
-     53 wa_table-matnr,
-     63 wa_table-kwmeng,
-      81 wa_table-netpr.
+           19 wa_table-erdat,
+           31 wa_table-auart,
+           45 wa_table-posnr,
+           53 wa_table-matnr,
+           63 wa_table-kwmeng,
+           81 wa_table-netpr.
 
   ENDLOOP.
 ELSE.
