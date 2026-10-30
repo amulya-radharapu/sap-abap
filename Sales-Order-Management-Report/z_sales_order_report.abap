@@ -16,11 +16,11 @@ TYPES: BEGIN OF ty_structure,
          netpr  TYPE vbap-netpr,
        END OF ty_structure.
 * Fetch sales order and item data
-
+start-of-Selection.
 SELECT a~vbeln, a~erdat, a~auart, b~posnr, b~matnr, b~kwmeng, b~netpr
    FROM vbak AS a
   INNER JOIN vbap AS b ON a~vbeln = b~vbeln INTO TABLE @DATA(it_table) WHERE a~vbeln in @s_vbeln.
-
+end-of-selection.
 IF sy-subrc = 0.
 skip 1 .
 write:/'Sales order',
