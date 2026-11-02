@@ -32,4 +32,8 @@ This project retrieves and displays purchase order information using SAP ABAP cl
 5. Purchase order summary calculations
 
 ## Project Status
+<<<<<<< HEAD
 Currently under development.
+=======
+Currently under development.
+>>>>>>> origin/project
