@@ -1,32 +1,28 @@
 REPORT Z_INVENTORY.
 
-data v type i.
+* Variable declaration for material number selection
+DATA V TYPE I.
 
-select-options s_matnr for v.
+SELECT-OPTIONS S_MATNR FOR V.
 
-PARAMETERS p_werks type mard-werks.
+* Parameter for entering Plant
+PARAMETERS P_WERKS TYPE MARD-WERKS.
 
-
-
-
-
+* Defining a custom structure for material and stock details
 TYPES: BEGIN OF TY_MARA,
          MATNR TYPE MARA-MATNR,
          MTART TYPE MARA-MTART,
          WERKS TYPE MARD-WERKS,
          LGORT TYPE MARD-LGORT,
          LABST TYPE MARD-LABST,
-
        END OF TY_MARA.
 
-
-
-
+* Internal table and work area declarations
 DATA IT_MARA TYPE TABLE OF TY_MARA.
 DATA WA_MARA TYPE TY_MARA.
 
-
-
+* Retrieving material and stock details using INNER JOIN
+* MARA contains general material data and MARD contains storage data
 SELECT  A~MATNR
         A~MTART
         B~WERKS
@@ -36,8 +32,10 @@ SELECT  A~MATNR
   ON A~MATNR = B~MATNR
   INTO TABLE IT_MARA where b~werks = p_werks and a~matnr in s_matnr .
 
-
+* Checking whether records were retrieved successfully
 IF SY-SUBRC = 0.
+
+* Displaying column headings
   WRITE: /'material',
           11 'material_type',
           27 'plant',
@@ -45,6 +43,7 @@ IF SY-SUBRC = 0.
            63'stock'.
   ULINE.
 
+* Looping through the internal table to display records
   LOOP AT IT_MARA INTO WA_MARA.
     WRITE:/ WA_MARA-MATNR,
            11 WA_MARA-MTART,
@@ -53,7 +52,10 @@ IF SY-SUBRC = 0.
            53 WA_MARA-LABST.
 
   ENDLOOP.
+
+* Displaying an error message when no records are retrieved
 ELSE.
   MESSAGE E000(ZMESSAGE).
 
-endif.
+ENDIF.
+
