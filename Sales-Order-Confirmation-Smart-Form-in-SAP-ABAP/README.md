@@ -15,14 +15,12 @@ A Smart Form that prints a sales order confirmation with a company logo, custome
 ## Tables Used
 
 | Table | Purpose | Fields used |
-|---|---|---|
 | VBAK | Sales order header | VBELN, ERDAT, KUNNR, NETWR, WAERK |
 | VBAP | Sales order items | VBELN, POSNR, MATNR, ARKTX, KWMENG, VRKME, NETWR |
 | KNA1 | Customer master (address) | KUNNR, NAME1, STRAS, PSTLZ, ORT01, LAND1 |
 
 ## How It Works
 
-```
 Selection screen (S_VBELN)
         |
 Driver program (Z_SF_SALES_ORDER_DRV)
@@ -32,12 +30,10 @@ Smart Form (Z_SF_SALES_ORDER)
 Initialization code reads VBAK -> KNA1 -> VBAP
         |
 Windows print the logo, address, order info, item table and total
-```
 
 ## Form Layout
 
 | Window | Type | Content |
-|---|---|---|
 | LOGO | Secondary | Company logo (Graphic node) |
 | INFO | Secondary | Order number, order date, customer number |
 | ADDRESS | Secondary | Customer name and address |
@@ -46,17 +42,15 @@ Windows print the logo, address, order info, item table and total
 ## Form Interface
 
 | Tab | Parameter | Type | Reference |
-|---|---|---|---|
-| Tables | IS_VBELN | LIKE | SELOPT |
+| Tables | IS_VBELN | Type | ZTT_VBELN|
 
 ## Global Definitions
 
-**Types:** `TY_VBAK`, `TY_KNA1`, `TY_VBAP`
+**Types:** 'TY_VBAK', 'TY_KNA1', 'TY_VBAP'
 
 **Global data:**
 
 | Variable | Type |
-|---|---|
 | WA_VBAK | TY_VBAK |
 | IT_VBAK | TABLE OF TY_VBAK |
 | WA_KNA1 | TY_KNA1 |
@@ -65,8 +59,8 @@ Windows print the logo, address, order info, item table and total
 
 ## Initialization Logic
 
-**Input parameter:** `IS_VBELN`
-**Output parameters:** `WA_VBAK`, `WA_KNA1`, `WA_VBAP`, `IT_VBAK`, `IT_VBAP`
+**Input parameter:** 'IS_VBELN'
+**Output parameters:** 'WA_VBAK', 'WA_KNA1', 'WA_VBAP', 'IT_VBAK', 'IT_VBAP'
 
 ```abap
 select vbeln erdat kunnr netwr waerk
@@ -85,11 +79,9 @@ if it_vbak is not initial.
     for all entries in it_vbak
     where vbeln = it_vbak-vbeln.
 endif.
-```
 
 ## Driver Program
 
-```abap
 REPORT z_sf_sales_order_drv.
 
 tables vbak.
@@ -102,32 +94,16 @@ CALL FUNCTION '/1BCDWB/SF000002xx'   "replace with your generated name
 IF sy-subrc <> 0.
 * Implement suitable error handling here
 ENDIF.
-```
 
-> The generated function module name (`/1BCDWB/SF...`) is different in every SAP system. Find yours in SMARTFORMS under **Environment > Function Module Name**.
+> The generated function module name ('/1BCDWB/SF...') is different in every SAP system. Find yours in SMARTFORMS under Environment > Function Module Name.
 
 ## How to Run
 
 1. Upload the logo in **SE78** (Form Graphics > BMAP) with your logo name.
-2. Create or import the form `Z_SF_SALES_ORDER` in **SMARTFORMS** and activate it.
+2. Create or import the form 'Z_SF_SALES_ORDER' in SMARTFORMS and activate it.
 3. Note the generated function module name.
-4. Create the program `Z_SF_SALES_ORDER_DRV` in **SE38** and put that name in the `CALL FUNCTION`.
+4. Create the program 'Z_SF_SALES_ORDER_DRV' in SE38 and put that name in the 'CALL FUNCTION'.
 5. Run the program, enter one sales order number in the **From** field and view the print preview.
-
-## Project Structure
-
-```
-sap-smartforms-sales-order/
-├── README.md
-├── abap/
-│   └── z_sf_sales_order_drv.abap
-├── smartform/
-│   └── z_sf_sales_order.xml
-├── screenshots/
-│   └── (output and configuration screenshots)
-└── docs/
-    └── notes.md
-```
 
 ## Screenshots
 
